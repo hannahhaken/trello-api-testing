@@ -21,20 +21,26 @@ class BoardResource(unittest.TestCase):
 
     def test_can_create_new_board(self):
         # GIVEN
+        create_board_result = self.create_new_board('Python test create new board',
+                                                    'This board has been made using the api')
+
+        self.assertEqual(200, create_board_result['status_code'])
+
+        self.delete_board(create_board_result['board_id'])
+
+    # def test_can_update_board_name(self):
+
+    def create_new_board(self, name, description):
         new_trello_board = {
-            'name': 'Python test create board',
-            'desc': 'This board has been made using the api'
+            'name': name,
+            'desc': description
         }
-        '5918887368d46016929ec940'
-        # WHEN
         response = requests.post(f'{self.TRELLO_BASE_URL}/boards?token={TOKEN}', json=new_trello_board)
 
-        id_of_created_board = response.json()['id']
-
-        # THEN
-        self.assertEqual(200, response.status_code)
-
-        self.delete_board(id_of_created_board)
+        return {
+            'board_id': response.json()['id'],
+            'status_code': response.status_code
+        }
 
     def delete_board(self, board_id):
         response = requests.delete(
