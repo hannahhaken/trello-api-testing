@@ -20,17 +20,17 @@ class BoardResource(unittest.TestCase):
 
     def test_can_create_new_board(self):
         # GIVEN
-        create_board_result = self.create_new_board('Python test create new board',
-                                                    'This board has been made using the api')
+        created_board_result = self.create_new_board('Python test create new board',
+                                                     'This board has been made using the api')
 
-        self.assertEqual(200, create_board_result['status_code'])
+        self.assertEqual(200, created_board_result['status_code'])
 
-        self.delete_board(create_board_result['board_id'])
+        self.delete_board(created_board_result['board_id'])
 
     def test_can_update_board_name(self):
         # GIVEN
-        new_board = self.create_new_board('Test can update board name', 'description')
-        board_id = new_board['board_id']
+        created_board_result = self.create_new_board('Test can update board name', 'description')
+        board_id = created_board_result['board_id']
 
         response = requests.put(f'{self.TRELLO_BASE_URL}/boards/{board_id}/name?token={TOKEN}', json={
             'value': 'new board name'
